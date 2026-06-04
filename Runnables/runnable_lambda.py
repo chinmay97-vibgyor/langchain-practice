@@ -29,6 +29,7 @@ notes_generator_chain = RunnableSequence(prompt, llm, parser)
 parallel_chain = RunnableParallel({
     'notes' : RunnablePassthrough(),
     'word_count' : RunnableLambda(word_count)
+    # 'word_count' : RunnableLambda(lambda x: len(x.split()))
 })
 
 final_chain = RunnableSequence(notes_generator_chain , parallel_chain)
