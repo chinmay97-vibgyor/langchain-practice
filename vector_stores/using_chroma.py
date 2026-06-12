@@ -36,11 +36,11 @@ vector_store = Chroma(
     collection_name="ipl_players"
 )
 
-#add_docsuments to the vector store
+# add documents to the vector store
 ids = vector_store.add_documents(docs)
 print(ids)
 
-result = vector_store.get(include=["embeddings", "metadatas", "documents"], ids=ids)
+result = vector_store.get(include=["embeddings", "metadatas", "documents"])
 
 for i, id in enumerate(result["ids"]):
     print(f"\n--- Doc {i+1} ---")
@@ -60,3 +60,19 @@ for doc, score in results:
     print(f"Metadata: {doc.metadata}")
     print(f"Score: {score}")
     print("---")
+
+updated_doc = Document(
+    page_content = "MS Dhoni is the former captain for Chennai Super Kings.",
+    metadata={"team": "Chennai Super Kings", "role": "Wicket Keeper"}
+)
+
+vector_store.update_document(document_id = '5d325b86-8823-41ad-adb8-c9cf156053cd', document= updated_doc)
+
+result = vector_store.get(include=["embeddings", "metadatas", "documents"])
+
+for i, id in enumerate(result["ids"]):
+    print(f"\n--- Doc {i+1} ---")
+    print(f"ID       : {id}")
+    print(f"Document : {result['documents'][i]}")
+    print(f"Metadata : {result['metadatas'][i]}")
+    print(f"Embedding: {result['embeddings'][i][:5]}...")  # first 5 dims only
